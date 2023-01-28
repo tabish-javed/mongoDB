@@ -7,14 +7,14 @@ const mongodb = require("mongodb")
 const userID = process.env.USER_ID
 const password = process.env.PASSWORD
 
-const MongoClient = mongodb.MongoClient
+// const MongoClient = mongodb.MongoClient
 
 const uriMongoDB = `mongodb+srv://${userID}:${password}@cluster0.v60qg.mongodb.net/?retryWrites=true&w=majority`
 
 let database
 
 async function connect() {
-    const client = await MongoClient.connect(uriMongoDB)
+    const client = await mongodb.MongoClient.connect(uriMongoDB)
     database = client.db("blog")
 }
 
