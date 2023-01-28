@@ -26,4 +26,6 @@ app.use(function (error, req, res, next) {
 
 db.connectToDatabase().then(function () {
     app.listen(3000);
+}).catch(function () {
+    console.log("Couldn't connect to database")
 })
