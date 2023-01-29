@@ -63,7 +63,34 @@ router.get("/posts/:id", async function (req, res) {
 
     post.date = post.date.toISOString()
 
-    res.render("post-detail", {post: post})
+    res.render("post-detail", { post: post })
+})
+
+router.get("/posts/:id/edit", async function (req, res) {
+    const postID = req.params.id
+    const post = await db
+        .getDb()
+        .collection("posts")
+        .findOne({ _id: new ObjectId(postID) }, { title: 1, summary: 1, body: 1 })
+
+    if (!post) {
+        return res.status(404).render("404")
+    }
+
+    res.render("update-post", { post: post })
+})
+
+router.post("/posts/:id/edit", async function (req, res) {
+    const query = { _id: new ObjectId(req.params.id) }
+    const updatedPostData = {
+        $set: {
+            title: req.body.title,
+            summary: req.body.summary,
+            body: req.body.content,
+        }
+    }
+    await db.getDb().collection("posts").updateOne(query, updatedPostData)
+    res.redirect('/posts')
 })
 
 module.exports = router;
