@@ -81,16 +81,23 @@ router.get("/posts/:id/edit", async function (req, res) {
 })
 
 router.post("/posts/:id/edit", async function (req, res) {
-    const query = { _id: new ObjectId(req.params.id) }
+    const postID = { _id: new ObjectId(req.params.id) }
     const updatedPostData = {
         $set: {
             title: req.body.title,
             summary: req.body.summary,
             body: req.body.content,
+            date: new Date()
         }
     }
-    await db.getDb().collection("posts").updateOne(query, updatedPostData)
+    await db.getDb().collection("posts").updateOne(postID, updatedPostData)
     res.redirect('/posts')
+})
+
+router.post("/posts/:id/delete", async function (req, res) {
+    const postID = { _id: new ObjectId(req.params.id) }
+    await db.getDb().collection("posts").deleteOne(postID)
+    res.redirect("/posts")
 })
 
 module.exports = router;
